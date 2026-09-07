@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>날씨 탐정대 | 폭염·폭우·폭설 변별 게임</title>
+<style>
+:root{--bg:#fffaf5;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;--accent:#5B805C;--success:#2f855a;--danger:#c53030}
+*{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;background:linear-gradient(180deg,#fffaf5 0%,#f7f8f6 100%);color:var(--text);min-height:100vh}button{font:inherit}
+.app{width:min(920px,calc(100% - 28px));margin:0 auto;padding:28px 0 40px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap}.eyebrow{color:var(--accent);font-weight:800;font-size:14px;margin-bottom:4px}h1{font-size:clamp(26px,5vw,42px);margin:0;line-height:1.15}.subtitle{margin:8px 0 0;color:var(--muted);line-height:1.6}.scoreboard{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 13px;font-size:14px;font-weight:700}.progress-track{width:100%;height:10px;background:#e9ece8;border-radius:999px;overflow:hidden;margin:12px 0 20px}.progress-bar{height:100%;width:0;background:var(--accent);border-radius:999px;transition:width .25s ease}.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(31,41,55,.06)}.mission-head{display:flex;gap:15px;align-items:flex-start}.scene-icon{width:64px;height:64px;flex:0 0 auto;display:grid;place-items:center;border-radius:18px;background:#f7f7f5;font-size:34px}.mission-label{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:7px}.question{font-size:clamp(19px,3vw,25px);font-weight:800;line-height:1.55;margin:0}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}.choice{border:2px solid var(--line);background:#fff;border-radius:20px;padding:18px 12px;min-height:136px;cursor:pointer;transition:.15s ease;text-align:center;color:var(--text)}.choice:hover{transform:translateY(-2px);border-color:#cbd5cb}.choice:focus-visible{outline:4px solid rgba(91,128,92,.18);outline-offset:2px}.choice .emoji{display:block;font-size:34px;margin-bottom:7px}.choice .word{display:block;font-size:22px;font-weight:900}.choice .meaning{display:block;color:var(--muted);font-size:13px;margin-top:4px}.choice.correct{border-color:var(--success);background:#effaf3}.choice.wrong{border-color:var(--danger);background:#fff5f5}.feedback{display:none;margin-top:18px;padding:16px 18px;border-radius:16px;line-height:1.6;background:#f8faf8;border:1px solid #dce7dc}.feedback.show{display:block}.feedback strong{font-size:18px}.hint{display:none;margin-top:12px;padding:14px 16px;background:#fff9e8;border:1px solid #f0dfac;border-radius:14px;color:#6e5a1a;line-height:1.55}.hint.show{display:block}.actions{margin-top:18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.btn{border:none;border-radius:14px;padding:12px 17px;min-height:46px;cursor:pointer;font-weight:800}.btn.secondary{background:#fff;color:var(--text);border:1px solid var(--line)}.btn.primary{background:var(--accent);color:white}.btn:disabled{cursor:not-allowed;opacity:.45}.reference{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.ref-box{border-radius:16px;padding:14px;text-align:center;background:rgba(255,255,255,.72);border:1px solid var(--line)}.ref-box b{display:block;margin:4px 0}.ref-box span{color:var(--muted);font-size:13px}.result{display:none;text-align:center;padding:34px 22px}.result.show{display:block}.result .trophy{font-size:64px}.result h2{font-size:30px;margin:8px 0}.result .big-score{font-size:24px;font-weight:900;color:var(--accent);margin:10px 0}.result p{color:var(--muted);line-height:1.7;max-width:600px;margin:0 auto}footer{text-align:center;color:#9ca3af;margin-top:20px;font-size:12px}
+@media(max-width:680px){.app{width:min(100% - 18px,920px);padding-top:18px}.card{padding:18px;border-radius:20px}.choices{grid-template-columns:1fr}.choice{min-height:82px;display:grid;grid-template-columns:48px 1fr;grid-template-rows:auto auto;column-gap:8px;text-align:left;align-items:center;padding:13px 16px}.choice .emoji{grid-row:1/3;margin:0}.choice .word{font-size:20px}.reference{grid-template-columns:1fr}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<main class="app">
+<div class="top"><div><div class="eyebrow">어휘 변별 게임</div><h1>날씨 탐정대 🔎</h1><p class="subtitle">상황 속 핵심 단서를 찾아 <b>폭염 · 폭우 · 폭설</b>을 정확히 구별해 봐!</p></div><div class="scoreboard"><div class="pill">문제 <span id="qnum">1</span>/<span id="total">12</span></div><div class="pill">⭐ <span id="score">0</span>점</div></div></div>
+<div class="progress-track"><div class="progress-bar" id="progress"></div></div>
+<section class="card" id="gameCard"><div class="mission-head"><div class="scene-icon" id="sceneIcon">🌡️</div><div><div class="mission-label">탐정 미션</div><p class="question" id="question"></p></div></div>
+<div class="choices">
+<button class="choice" data-answer="폭염"><span class="emoji">🌞</span><span class="word">폭염</span><span class="meaning">아주 심한 더위</span></button>
+<button class="choice" data-answer="폭우"><span class="emoji">🌧️</span><span class="word">폭우</span><span class="meaning">아주 많은 비</span></button>
+<button class="choice" data-answer="폭설"><span class="emoji">❄️</span><span class="word">폭설</span><span class="meaning">아주 많은 눈</span></button>
+</div><div class="feedback" id="feedback" aria-live="polite"></div><div class="hint" id="hint" aria-live="polite"></div><div class="actions"><button class="btn secondary" id="hintBtn">💡 단서 보기</button><button class="btn primary" id="nextBtn" disabled>다음 문제 →</button></div></section>
+<section class="card result" id="resultCard"><div class="trophy">🏆</div><h2>미션 완료!</h2><div class="big-score" id="finalScore"></div><p id="resultMessage"></p><button class="btn primary" id="restartBtn" style="margin-top:20px">처음부터 다시 하기</button></section>
+<section class="reference"><div class="ref-box"><div style="font-size:25px">🌞</div><b>폭염</b><span>더위가 아주 심해요</span></div><div class="ref-box"><div style="font-size:25px">🌧️</div><b>폭우</b><span>비가 아주 많이 와요</span></div><div class="ref-box"><div style="font-size:25px">❄️</div><b>폭설</b><span>눈이 아주 많이 와요</span></div></section>
+<footer>폭염 · 폭우 · 폭설 어휘 변별 학습용 웹게임</footer></main>
+<script>
+const questions=[
+{text:'낮 기온이 38도까지 올라 밖에 서 있기만 해도 땀이 줄줄 나요.',answer:'폭염',icon:'🌡️',hint:'무엇이 아주 심한지 생각해 봐. → 더위',why:'기온이 매우 높고 더위가 심한 상황이므로 폭염이야.'},
+{text:'밤새 비가 쉴 새 없이 내려 도로 곳곳에 물이 차올랐어요.',answer:'폭우',icon:'☔',hint:'하늘에서 무엇이 아주 많이 내렸을까? → 비',why:'비가 매우 많이 내려 물이 차오른 상황이므로 폭우야.'},
+{text:'아침에 문을 열어 보니 눈이 무릎 높이까지 쌓여 있었어요.',answer:'폭설',icon:'⛄',hint:'땅에 무엇이 아주 많이 쌓였을까? → 눈',why:'눈이 매우 많이 내려 쌓인 상황이므로 폭설이야.'},
+{text:'너무 더워서 운동장 활동이 취소되고 시원한 실내에서 쉬었어요.',answer:'폭염',icon:'🥵',hint:'비나 눈이 아니라 높은 기온이 단서야.',why:'심한 더위 때문에 야외 활동이 어려운 상황이므로 폭염이야.'},
+{text:'빗물이 빠르게 불어나 지하차도 출입이 통제되었어요.',answer:'폭우',icon:'🌧️',hint:'빗물과 침수를 떠올려 봐.',why:'많은 비로 물이 불어난 상황이므로 폭우야.'},
+{text:'제설차가 밤새 도로에 쌓인 눈을 치우고 있어요.',answer:'폭설',icon:'🚜',hint:'제설은 무엇을 치우는 일일까? → 눈',why:'눈이 많이 쌓여 제설이 필요한 상황이므로 폭설이야.'},
+{text:'연일 35도가 넘는 날씨가 이어지고 밤에도 기온이 잘 내려가지 않아요.',answer:'폭염',icon:'🌞',hint:'35도, 높은 기온이 핵심 단서야.',why:'높은 기온이 계속되는 심한 더위이므로 폭염이야.'},
+{text:'짧은 시간 동안 엄청난 양의 비가 쏟아져 하천 수위가 높아졌어요.',answer:'폭우',icon:'🌊',hint:'하천 수위를 높인 것은 많은 무엇일까?',why:'짧은 시간에 많은 비가 내리는 상황이므로 폭우야.'},
+{text:'기차 선로에 눈이 너무 많이 쌓여 열차 운행이 늦어졌어요.',answer:'폭설',icon:'🚆',hint:'선로 위에 많이 쌓인 것이 무엇인지 생각해 봐.',why:'많은 눈 때문에 교통에 문제가 생긴 상황이므로 폭설이야.'},
+{text:'햇볕이 매우 강하고 기온이 높아 외출할 때 물을 자주 마셔야 해요.',answer:'폭염',icon:'💧',hint:'물을 자주 마셔야 할 만큼 심한 더위!',why:'고온으로 건강을 조심해야 하는 상황이므로 폭염이야.'},
+{text:'하루 종일 굵은 빗줄기가 계속되어 운동장에 큰 물웅덩이가 생겼어요.',answer:'폭우',icon:'🌧️',hint:'굵은 빗줄기와 물웅덩이가 단서야.',why:'비가 많이 내려 물이 고인 상황이므로 폭우야.'},
+{text:'밤새 내린 눈 때문에 자동차 지붕이 하얗게 덮이고 도로도 막혔어요.',answer:'폭설',icon:'🚗',hint:'자동차와 도로를 덮은 것이 무엇일까?',why:'눈이 매우 많이 쌓여 교통이 어려운 상황이므로 폭설이야.'}
+];
+let index=0,score=0,answered=false;
+const qnum=document.getElementById('qnum'),total=document.getElementById('total'),scoreEl=document.getElementById('score'),progress=document.getElementById('progress'),questionEl=document.getElementById('question'),sceneIcon=document.getElementById('sceneIcon'),feedback=document.getElementById('feedback'),hint=document.getElementById('hint'),hintBtn=document.getElementById('hintBtn'),nextBtn=document.getElementById('nextBtn'),choices=[...document.querySelectorAll('.choice')],gameCard=document.getElementById('gameCard'),resultCard=document.getElementById('resultCard'),finalScore=document.getElementById('finalScore'),resultMessage=document.getElementById('resultMessage'),restartBtn=document.getElementById('restartBtn');
+total.textContent=questions.length;
+function renderQuestion(){const q=questions[index];qnum.textContent=index+1;scoreEl.textContent=score;progress.style.width=`${((index+1)/questions.length)*100}%`;questionEl.textContent=q.text;sceneIcon.textContent=q.icon;answered=false;feedback.className='feedback';feedback.innerHTML='';hint.className='hint';hint.textContent='';nextBtn.disabled=true;choices.forEach(btn=>{btn.disabled=false;btn.classList.remove('correct','wrong')})}
+choices.forEach(btn=>btn.addEventListener('click',()=>{if(answered)return;answered=true;const q=questions[index],selected=btn.dataset.answer,correct=selected===q.answer;if(correct){score++;btn.classList.add('correct');feedback.innerHTML=`<strong>⭕ 정답! ${q.answer}</strong><br>${q.why}<br><b>왜 ${q.answer}인지 한 문장으로 말해 보자.</b>`}else{btn.classList.add('wrong');const correctBtn=choices.find(b=>b.dataset.answer===q.answer);if(correctBtn)correctBtn.classList.add('correct');feedback.innerHTML=`<strong>❌ 아쉽다! 정답은 ${q.answer}</strong><br>${q.why}<br><b>핵심 단서를 다시 찾아보자.</b>`}feedback.classList.add('show');scoreEl.textContent=score;nextBtn.disabled=false;choices.forEach(b=>b.disabled=true)}));
+hintBtn.addEventListener('click',()=>{hint.textContent='💡 '+questions[index].hint;hint.classList.add('show')});
+nextBtn.addEventListener('click',()=>{if(!answered)return;if(index<questions.length-1){index++;renderQuestion()}else showResult()});
+restartBtn.addEventListener('click',()=>{index=0;score=0;resultCard.classList.remove('show');gameCard.style.display='block';renderQuestion();window.scrollTo({top:0,behavior:'smooth'})});
+function showResult(){gameCard.style.display='none';resultCard.classList.add('show');finalScore.textContent=`${score} / ${questions.length}점`;if(score===questions.length)resultMessage.textContent='완벽해! 폭염은 심한 더위, 폭우는 많은 비, 폭설은 많은 눈이라는 핵심 차이를 정확하게 구별했어.';else if(score>=10)resultMessage.textContent='아주 잘했어! 헷갈린 문제의 핵심 단서만 다시 확인하면 완벽해.';else if(score>=7)resultMessage.textContent='잘하고 있어. 먼저 더위·비·눈 중 무엇이 핵심인지 찾아보면 훨씬 쉽게 구별할 수 있어.';else resultMessage.textContent='폭염=더위, 폭우=비, 폭설=눈을 먼저 연결해서 기억한 뒤 다시 도전해 보자.'}
+renderQuestion();
+</script>
+</body>
+</html>
